@@ -11,7 +11,7 @@ void setup()
 
 void loop()
 {
-  int val = analogRead(sensePin)
+  int val = analogRead(sensePin);
   
   val = constrain(val,750,900);
   int ledLevel = map(val,750,900,255,0);
