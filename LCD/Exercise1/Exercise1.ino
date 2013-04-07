@@ -1,41 +1,13 @@
 /*
-  LiquidCrystal Library - scrollDisplayLeft() and scrollDisplayRight()
- 
- Demonstrates the use a 16x2 LCD display.  The LiquidCrystal
- library works with all LCD displays that are compatible with the 
- Hitachi HD44780 driver. There are many of them out there, and you
- can usually tell them by the 16-pin interface.
- 
- This sketch prints "Hello World!" to the LCD and uses the
- scrollDisplayLeft() and scrollDisplayRight() methods to scroll
- the text.
- 
- The circuit:
- * LCD RS pin to digital pin 8
- * LCD Enable pin to digital pin 9
- * LCD D4 pin to digital pin 4
- * LCD D5 pin to digital pin 5
- * LCD D6 pin to digital pin 6
- * LCD D7 pin to digital pin 7
- * LCD R/W pin to ground
- * 10K resistor:
- * ends to +5V and ground
- * wiper to LCD VO pin (pin 3)
- 
- Library originally added 18 Apr 2008
- by David A. Mellis
- library modified 5 Jul 2009
- by Limor Fried (http://www.ladyada.net)
- example added 9 Jul 2009
- by Tom Igoe 
- modified 22 Nov 2010
- by Tom Igoe
- 
- This example code is in the public domain.
- 
- http://arduino.cc/en/Tutorial/LiquidCrystalScroll
- 
- */
+
+This exercise completes both Objectives 1 & 2
+
+Objective 1: Automatically accelerate the scrolling text as it is pushed off of the screen (at both ends of the screen)
+- Can clearly see that the text moves faster as it approaches the edges of the screen and comes back onto the screen.
+Objective 2: Replace the text with a character that we create.
+- Text replaced with a custom-made sword character, repeated 13 times to match the length of the original text.
+
+*/
 
 // include the library code:
 #include <LiquidCrystal.h>
@@ -43,7 +15,8 @@
 // initialize the library with the numbers of the interface pins
 LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
-byte smiley[8] = {
+// create sword character
+byte sword[8] = {
   B00100,
   B01010,
   B01010,
@@ -52,82 +25,66 @@ byte smiley[8] = {
   B00100,
   B00100,
 };
+
+// draws 13 swords on the display
 void setup() {
-  lcd.createChar(0, smiley);
+  lcd.createChar(0, sword);
   lcd.begin(16, 2);
-  for (int i = 0; i < 13; i++){
+  for (int numSword = 1; numSword <= 13; numSword++){
     lcd.write(byte(0));
   }
   delay(1000);
 }
 
 void loop() {
-  // scroll 8 positions (string length) to the left 
-  // to move it offscreen left:
+  // scroll 8 positions to the left at normal rate
   for (int positionCounter = 0; positionCounter < 8; positionCounter++) {
-    // scroll one position left:
     lcd.scrollDisplayLeft(); 
-    // wait a bit
     delay(300);
   }
 
-  // scroll 5 positions (string length) to the left, but faster
-  // to move it offscreen left:
+  // scroll 5 positions to the left at a faster rate
+  // accelerate scrolling as it pushes swords off the screen
   for (int positionCounter = 0; positionCounter < 5; positionCounter++) {
-    // scroll one position left:
     lcd.scrollDisplayLeft(); 
-    // wait a bit
     delay(50);
   }
 
-  // scroll 5 positions (string length + display length) to the right, but faster
-  // to move it offscreen right:
+  // scroll 5 positions to the right at a faster rate
+  // accelerate scrolling as it begins to bring back swords from off the screen
   for (int positionCounter = 0; positionCounter < 5; positionCounter++) {
-    // scroll one position right:
     lcd.scrollDisplayRight(); 
-    // wait a bit:
     delay(50);
   }
 
-  // scroll 19 positions (string length + display length) to the right
-  // to move it offscreen right:
+  // scroll 19 positions to the right at normal rate
   for (int positionCounter = 0; positionCounter < 19; positionCounter++) {
-    // scroll one position right:
     lcd.scrollDisplayRight(); 
-    // wait a bit:
     delay(300);
   }
 
-  // scroll 5 positions (string length + display length) to the right, but faster
-  // to move it offscreen right:
+  // scroll 5 positions to the right at a faster rate
+  // accelerate scrolling as it pushes swords off the screen
   for (int positionCounter = 0; positionCounter < 5; positionCounter++) {
-    // scroll one position right:
     lcd.scrollDisplayRight(); 
-    // wait a bit:
     delay(50);
   }
 
-  // scroll 5 positions (display length + string length) to the left, but faster
-  // to move it back to center:
+  // scroll 5 positions to the left at a faster rate
+  // ccelerate scrolling as it begins to bring back swords from off the screen
   for (int positionCounter = 0; positionCounter < 5; positionCounter++) {
-    // scroll one position left:
     lcd.scrollDisplayLeft(); 
-    // wait a bit:
     delay(50);
   }
 
-  // scroll 11 positions (display length + string length) to the left
-  // to move it back to center:
+  // scroll 11 positions to the left at normal rate
+  // brings swords back to original position
   for (int positionCounter = 0; positionCounter < 11; positionCounter++) {
-    // scroll one position left:
     lcd.scrollDisplayLeft(); 
-    // wait a bit:
     delay(300);
   }
 
-  // delay at the end of the full loop:
+  // delay at the end of the full loop
   delay(1000);
 
 }
-
-
