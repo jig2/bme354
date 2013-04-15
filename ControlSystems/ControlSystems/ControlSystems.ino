@@ -45,7 +45,9 @@ int read_button()
 }
 
 int inpin = 1;
-int outpin = 4;
+int outpin = 2;
+
+float tempThresh;
 
 void setup()
 {
@@ -53,39 +55,50 @@ void setup()
   pinMode(outpin,OUTPUT);
 
   lcd.begin(16, 2);
-
   lcd.clear();
-  selectTemp();
+
+  tempThresh = selectTemp();
+
+
 }
 
 void loop()
 { 
   lcd.clear();  
-  controlHeater();
+  controlHeater(tempThresh);
   delay(1000);
 }
 
-void controlHeater()
+void controlHeater(float tempThresh)
 {
   float readval = analogRead(inpin);
   float voltage = readval/1023*5;
   float temperature = voltage/(4.5-0)*(300-0);
 
   lcd.setCursor(0,0);
+  lcd.print("Current: ");
+  lcd.setCursor(8,0);
   lcd.print(temperature,0);
+  
+  lcd.setCursor(0,1);
+  lcd.print("Thresh: ");
+  lcd.setCursor(7,1);
+  lcd.print(tempThresh,0);
 
-  if (temperature > 150) {
-    lcd.setCursor(0,1);
-    lcd.write("Off");
+  if (temperature > tempThresh) {
+    lcd.setCursor(11,1);
+    lcd.write("High!");
+    digitalWrite(outpin,LOW);
   } 
   else {
-    lcd.setCursor(0,1);
-    lcd.write("On");
+    lcd.setCursor(11,1);
+    lcd.write("Low!");
+    digitalWrite(outpin,HIGH);
   }
 
   if (temperature > 300) {
-    lcd.setCursor(0,1);
-    lcd.write("10 Second Wait");
+    lcd.setCursor(11,1);
+    lcd.write("WAIT!");
     delay(9000); 
   }
 }
@@ -93,7 +106,7 @@ void controlHeater()
 float selectTemp()
 {
   float tempThresh;
-  
+
   int hundreds = 0;
   int tens = 0;
   int ones = 0;
@@ -102,7 +115,7 @@ float selectTemp()
 
   lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print("Select A Temperature");
+  lcd.print("Select A Temp");
   String tempString = String(hundreds) + String(tens) + String(ones);
   lcd.setCursor(0,1);
   lcd.print(tempString);
@@ -145,6 +158,7 @@ float selectTemp()
           }
         }
         float tempThresh = hundreds*100 + tens*10 + ones;
+
         String tempString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
         lcd.print(tempString);
@@ -188,9 +202,11 @@ float selectTemp()
       {
         if (place == 1) {
           place = 3;
-        } else if (place == 2) {
+        } 
+        else if (place == 2) {
           place = 1;
-        } else {
+        } 
+        else {
           place = 2;
         }
         float tempThresh = hundreds*100 + tens*10 + ones;
@@ -204,9 +220,11 @@ float selectTemp()
       {
         if (place == 1) {
           place = 2;
-        } else if (place == 2) {
+        } 
+        else if (place == 2) {
           place = 3;
-        } else {
+        } 
+        else {
           place = 1;
         }
         float tempThresh = hundreds*100 + tens*10 + ones;
@@ -216,13 +234,37 @@ float selectTemp()
         delay(400);
         break;
       }
+    case btnSELECT:
+      {
+        float tempThresh = hundreds*100 + tens*10 + ones;
+        if (tempThresh>300 || tempThresh<20) {
+          lcd.clear();
+          lcd.setCursor(0,0);
+          lcd.print("You suck!");
+          lcd.setCursor(0,1);
+          lcd.print("Resetting!");
+          delay(5000);
+          hundreds = 0;
+          tens = 0;
+          ones = 0;
+          float tempThresh = hundreds*100 + tens*10 + ones;
+          String tempString = String(hundreds) + String(tens) + String(ones);
+          lcd.clear();
+          lcd.setCursor(0,0);
+          lcd.print("Select A Temp");
+          lcd.setCursor(0,1);
+          lcd.print(tempString);
+          delay(400);
+        } else{
+          return tempThresh;
+        }
+        break;
+      }
     }
- 
-    if (button_in == btnSELECT) break;
   }
-  
-  return tempThresh;
 }
+
+
 
 
 
