@@ -45,8 +45,11 @@ int read_button()
 }
 
 int inpin = 1;
+// In order to test the code, we connected a wire to pin D2 and as such we needed to use D2 in the code rather than D13
 int outpin = 2;
 
+// The variable tempThresh establishes the user defined threshold after which the heater should turn off, or in our
+// case it lets the user know that the temperature is too high and turns off the LED.
 float tempThresh;
 
 void setup()
@@ -69,6 +72,9 @@ void loop()
   delay(1000);
 }
 
+// controlHeater prints both the current and threshold temperatures and utilizes an if tree to let the user know whether
+// or not the threshold has been met, as well as turning off the LED. Furthermore, it stops the program for 10 seconds,
+// to let the device cool down if the temperature is too high, above 300 C.
 void controlHeater(float tempThresh)
 {
   float readval = analogRead(inpin);
@@ -102,7 +108,10 @@ void controlHeater(float tempThresh)
     delay(9000); 
   }
 }
-
+// This part of the code is the process where the user gets to choose the threshold temperature. By using the buttons
+// the user can change the digit in each of the different locations, hundreds, tens or ones, then hit select to set the
+// threshold. It returns the variable tempThresh for use in the controlHeater part of the code. Additionally, it has
+// a sanity check to reset the program if the temperature threshold set is too high or too low.
 float selectTemp()
 {
   float tempThresh;
