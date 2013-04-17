@@ -52,7 +52,7 @@ float PreheatTemp()
             ones = 0;
           }
         }
-        float tempThresh = hundreds*100 + tens*10 + ones;
+        float PreheatThresh = hundreds*100 + tens*10 + ones;
 
         String tempString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
@@ -86,7 +86,7 @@ float PreheatTemp()
             ones = 9;
           }
         }
-        float tempThresh = hundreds*100 + tens*10 + ones;
+        float PreheatThresh = hundreds*100 + tens*10 + ones;
         String tempString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
         lcd.print(tempString);
@@ -104,7 +104,7 @@ float PreheatTemp()
         else {
           place = 2;
         }
-        float tempThresh = hundreds*100 + tens*10 + ones;
+        float PreheatThresh = hundreds*100 + tens*10 + ones;
         String tempString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
         lcd.print(tempString);
@@ -122,7 +122,7 @@ float PreheatTemp()
         else {
           place = 1;
         }
-        float tempThresh = hundreds*100 + tens*10 + ones;
+        float PreheatThresh = hundreds*100 + tens*10 + ones;
         String tempString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
         lcd.print(tempString);
@@ -131,8 +131,8 @@ float PreheatTemp()
       }
     case btnSELECT:
       {
-        float tempThresh = hundreds*100 + tens*10 + ones;
-        if (tempThresh>170 || tempThresh<130) {
+        float PreheatThresh = hundreds*100 + tens*10 + ones;
+        if (PreheatThresh>170 || PreheatThresh<130) {
           lcd.clear();
           lcd.setCursor(0,0);
           lcd.print("Outside of Range");
@@ -142,7 +142,7 @@ float PreheatTemp()
           hundreds = 0;
           tens = 0;
           ones = 0;
-          float tempThresh = hundreds*100 + tens*10 + ones;
+          float PreheatThresh = hundreds*100 + tens*10 + ones;
           String tempString = String(hundreds) + String(tens) + String(ones);
           lcd.clear();
           lcd.setCursor(0,0);
@@ -151,7 +151,7 @@ float PreheatTemp()
           lcd.print(tempString);
           delay(400);
         } else{
-          return tempThresh;
+          return PreheatThresh;
         }
         break;
       }
