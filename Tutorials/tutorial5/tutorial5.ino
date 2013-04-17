@@ -12,7 +12,7 @@ void setup()
 
 boolean debounce(boolean last)
 {
-  boolean current = digitalRead(switchPin)
+  boolean current = digitalRead(switchPin);
   if (last != current)
   {
     delay(5);
