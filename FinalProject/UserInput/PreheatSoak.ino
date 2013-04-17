@@ -79,14 +79,11 @@ float SoakTemp()
     case btnLEFT:
       {
         if (place == 1) {
-          place = 3;
+          place = 2;
         } 
         else if (place == 2) {
           place = 1;
         } 
-        else {
-          place = 2;
-        }
         float SoakThresh = tens*10 + ones;
         String SoakString = String(tens) + String(ones);
         lcd.setCursor(0,1);
@@ -98,9 +95,6 @@ float SoakTemp()
       {
         if (place == 1) {
           place = 2;
-        } 
-        else if (place == 2) {
-          place = 3;
         } 
         else {
           place = 1;
