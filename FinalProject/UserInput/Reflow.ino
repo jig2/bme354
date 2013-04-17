@@ -1,6 +1,6 @@
-float SoakTemp()
+float ReflowTemp()
 {
-  float SoakThresh;
+  float ReflowThresh;
 
   int tens = 0;
   int ones = 0;
@@ -10,9 +10,9 @@ float SoakTemp()
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Select A Temp");
-  String SoakString = String(tens) + String(ones);
+  String ReflowString = String(tens) + String(ones);
   lcd.setCursor(0,1);
-  lcd.print(SoakString);
+  lcd.print(ReflowString);
 
 
   while (0!=1) {
@@ -43,11 +43,11 @@ float SoakTemp()
             ones = 0;
           }
         }
-        float SoakThresh = tens*10 + ones;
+        float ReflowThresh = tens*10 + ones;
 
-        String tempString = String(hundreds) + String(tens) + String(ones);
+        String ReflowString = String(tens) + String(ones);
         lcd.setCursor(0,1);
-        lcd.print(tempString);
+        lcd.print(ReflowString);
         delay(400);
         break;
       }
@@ -69,10 +69,10 @@ float SoakTemp()
             ones = 9;
           }
         }
-        float SoakThresh = tens*10 + ones;
-        String SoakString = String(tens) + String(ones);
+        float ReflowThresh = tens*10 + ones;
+        String ReflowString = String(tens) + String(ones);
         lcd.setCursor(0,1);
-        lcd.print(SoakString);
+        lcd.print(ReflowString);
         delay(400);
         break;
       }
@@ -84,10 +84,10 @@ float SoakTemp()
         else if (place == 2) {
           place = 1;
         } 
-        float SoakThresh = tens*10 + ones;
-        String SoakString = String(tens) + String(ones);
+        float ReflowThresh = tens*10 + ones;
+        String ReflowString = String(tens) + String(ones);
         lcd.setCursor(0,1);
-        lcd.print(SoakString);
+        lcd.print(ReflowString);
         delay(400);
         break;
       }
@@ -99,17 +99,17 @@ float SoakTemp()
         else {
           place = 1;
         }
-        float SoakThresh = tens*10 + ones;
-        String tempString = String(tens) + String(ones);
+        float ReflowThresh = tens*10 + ones;
+        String ReflowString = String(tens) + String(ones);
         lcd.setCursor(0,1);
-        lcd.print(SoakString);
+        lcd.print(ReflowString);
         delay(400);
         break;
       }
     case btnSELECT:
       {
-        float SOakThresh = tens*10 + ones;
-        if (SoakThresh>300 || SoakThresh<20) {
+        float ReflowThresh = tens*10 + ones;
+        if (ReflowThresh>300 || ReflowThresh<20) {
           lcd.clear();
           lcd.setCursor(0,0);
           lcd.print("You suck!");
@@ -118,16 +118,16 @@ float SoakTemp()
           delay(5000);
           tens = 0;
           ones = 0;
-          float SoakThresh = tens*10 + ones;
-          String SoakString = String(tens) + String(ones);
+          float ReflowThresh = tens*10 + ones;
+          String ReflowString = String(tens) + String(ones);
           lcd.clear();
           lcd.setCursor(0,0);
           lcd.print("Select A Temp");
           lcd.setCursor(0,1);
-          lcd.print(SoakString);
+          lcd.print(ReflowString);
           delay(400);
         } else{
-          return SoakThresh;
+          return ReflowThresh;
         }
         break;
       }
