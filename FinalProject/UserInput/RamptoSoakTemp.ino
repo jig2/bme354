@@ -1,6 +1,6 @@
-float selectTemp()
+float PreheatTemp()
 {
-  float tempThresh;
+  float PreheatThresh;
 
   int hundreds = 0;
   int tens = 0;
