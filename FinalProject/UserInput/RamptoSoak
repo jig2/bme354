@@ -132,7 +132,7 @@ float selectTemp()
     case btnSELECT:
       {
         float tempThresh = hundreds*100 + tens*10 + ones;
-        if (tempThresh>300 || tempThresh<20) {
+        if (tempThresh>170 || tempThresh<130) {
           lcd.clear();
           lcd.setCursor(0,0);
           lcd.print("Outside of Range");
@@ -146,7 +146,7 @@ float selectTemp()
           String tempString = String(hundreds) + String(tens) + String(ones);
           lcd.clear();
           lcd.setCursor(0,0);
-          lcd.print("Select A Temp");
+          lcd.print("Preheat Temp");
           lcd.setCursor(0,1);
           lcd.print(tempString);
           delay(400);
