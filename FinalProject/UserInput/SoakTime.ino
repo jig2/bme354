@@ -86,7 +86,7 @@ float SoakTime()
             ones = 9;
           }
         }
-        float SoaktimeThresh = hundreds*100 + tens*10 + ones;
+        float SoakTimeThresh = hundreds*100 + tens*10 + ones;
         String StimeString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
         lcd.print(StimeString);
@@ -104,7 +104,7 @@ float SoakTime()
         else {
           place = 2;
         }
-        float SoaktimeThresh = hundreds*100 + tens*10 + ones;
+        float SoakTimeThresh = hundreds*100 + tens*10 + ones;
         String StimeString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
         lcd.print(StimeString);
@@ -122,7 +122,7 @@ float SoakTime()
         else {
           place = 1;
         }
-        float SoaktimeThresh = hundreds*100 + tens*10 + ones;
+        float SoakTimeThresh = hundreds*100 + tens*10 + ones;
         String StimeString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
         lcd.print(StimeString);
@@ -131,8 +131,8 @@ float SoakTime()
       }
     case btnSELECT:
       {
-        float SoaktimeThresh = hundreds*100 + tens*10 + ones;
-        if (SoaktimeThresh>120 || SoaktimeThresh<60) {
+        float SoakTimeThresh = hundreds*100 + tens*10 + ones;
+        if (SoakTimeThresh>120 || SoakTimeThresh<60) {
           lcd.clear();
           lcd.setCursor(0,0);
           lcd.print("Outside of Range");
@@ -142,7 +142,7 @@ float SoakTime()
           hundreds = 0;
           tens = 0;
           ones = 0;
-          float SoaktimeThresh = hundreds*100 + tens*10 + ones;
+          float SoakTimeThresh = hundreds*100 + tens*10 + ones;
           String StimeString = String(hundreds) + String(tens) + String(ones);
           lcd.clear();
           lcd.setCursor(0,0);
@@ -151,7 +151,7 @@ float SoakTime()
           lcd.print(StimeString);
           delay(400);
         } else{
-          return SoaktimeThresh;
+          return SoakTimeThresh;
         }
         break;
       }
