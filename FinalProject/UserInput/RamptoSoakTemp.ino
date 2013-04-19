@@ -11,9 +11,9 @@ float PreheatTemp()
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Preheat Temp");
-  String tempString = String(hundreds) + String(tens) + String(ones);
+  String PreheattempString = String(hundreds) + String(tens) + String(ones);
   lcd.setCursor(0,1);
-  lcd.print(tempString);
+  lcd.print(PreheattempString);
 
 
   while (0!=1) {
@@ -54,9 +54,9 @@ float PreheatTemp()
         }
         float PreheatThresh = hundreds*100 + tens*10 + ones;
 
-        String tempString = String(hundreds) + String(tens) + String(ones);
+        String PreheattempString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
-        lcd.print(tempString);
+        lcd.print(PreheattempString);
         delay(400);
         break;
       }
@@ -87,9 +87,9 @@ float PreheatTemp()
           }
         }
         float PreheatThresh = hundreds*100 + tens*10 + ones;
-        String tempString = String(hundreds) + String(tens) + String(ones);
+        String PreheattempString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
-        lcd.print(tempString);
+        lcd.print(PreheattempString);
         delay(400);
         break;
       }
@@ -105,9 +105,9 @@ float PreheatTemp()
           place = 2;
         }
         float PreheatThresh = hundreds*100 + tens*10 + ones;
-        String tempString = String(hundreds) + String(tens) + String(ones);
+        String PreheattempString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
-        lcd.print(tempString);
+        lcd.print(PreheattempString);
         delay(400);
         break;
       }
@@ -123,9 +123,9 @@ float PreheatTemp()
           place = 1;
         }
         float PreheatThresh = hundreds*100 + tens*10 + ones;
-        String tempString = String(hundreds) + String(tens) + String(ones);
+        String PreheattempString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
-        lcd.print(tempString);
+        lcd.print(PreheattempString);
         delay(400);
         break;
       }
@@ -143,12 +143,12 @@ float PreheatTemp()
           tens = 0;
           ones = 0;
           float PreheatThresh = hundreds*100 + tens*10 + ones;
-          String tempString = String(hundreds) + String(tens) + String(ones);
+          String PreaheattempString = String(hundreds) + String(tens) + String(ones);
           lcd.clear();
           lcd.setCursor(0,0);
           lcd.print("Preheat Temp");
           lcd.setCursor(0,1);
-          lcd.print(tempString);
+          lcd.print(PreheattempString);
           delay(400);
         } else{
           return PreheatThresh;
