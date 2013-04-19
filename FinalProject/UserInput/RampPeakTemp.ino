@@ -148,7 +148,7 @@ float PeakTemp()
           lcd.setCursor(0,0);
           lcd.print("Peak Temp");
           lcd.setCursor(0,1);
-          lcd.print(tempString);
+          lcd.print(PeaktempString);
           delay(400);
         } else{
           return PeakThresh;
