@@ -1,15 +1,15 @@
-float selectSoakSlope()
+float selectPeakSlope()
 {
-  float slopeSoakThresh;
+  float slopePeakThresh;
 
   int ones = 0;
 
   lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print("Soak Slope");
-  String SslopeString = String(ones);
+  lcd.print("Peak Slope");
+  String PslopeString = String(ones);
   lcd.setCursor(0,1);
-  lcd.print(SslopeString);
+  lcd.print(PslopeString);
 
 
   while (0!=1) {
@@ -30,11 +30,11 @@ float selectSoakSlope()
           else {
             ones = 0;
           }
-        float slopeSoakThresh = ones;
+        float slopePeakThresh = ones;
 
-        String SslopeString = String(ones);
+        String PslopeString = String(ones);
         lcd.setCursor(0,1);
-        lcd.print(SslopeString);
+        lcd.print(PslopeString);
         delay(400);
         break;
       }
@@ -46,17 +46,17 @@ float selectSoakSlope()
           else {
             ones = 9;
           }
-        float slopeSoakThresh = ones;
-        String SslopeString = String(ones);
+        float slopePeakThresh = ones;
+        String PslopeString = String(ones);
         lcd.setCursor(0,1);
-        lcd.print(SslopeString);
+        lcd.print(PslopeString);
         delay(400);
         break;
       }
     case btnSELECT:
       {
-        float slopeSoakThresh =ones;
-        if (slopeSoakThresh>3 || slopeSoakThresh<1) {
+        float slopePeakThresh =ones;
+        if (slopePeakThresh>3 || slopePeakThresh<1) {
           lcd.clear();
           lcd.setCursor(0,0);
           lcd.print("Outside Range");
@@ -64,16 +64,16 @@ float selectSoakSlope()
           lcd.print("Resetting!");
           delay(5000);
           ones = 0;
-          float slopeSoakThresh =ones;
-          String SslopeString =String(ones);
+          float SlopePeakThresh =ones;
+          String PslopeString =String(ones);
           lcd.clear();
           lcd.setCursor(0,0);
-          lcd.print("Soak Slope");
+          lcd.print("Peak Slope");
           lcd.setCursor(0,1);
-          lcd.print(SslopeString);
+          lcd.print(PslopeString);
           delay(400);
         } else{
-          return slopeSoakThresh;
+          return slopePeakThresh;
         }
         break;
       }
