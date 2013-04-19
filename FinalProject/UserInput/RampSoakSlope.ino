@@ -1,15 +1,15 @@
-float selectSlope()
+float selectSoakSlope()
 {
-  float slopeThresh;
+  float slopeSoakThresh;
 
   int ones = 0;
 
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Soak Slope");
-  String slopeString = String(ones);
+  String SslopeString = String(ones);
   lcd.setCursor(0,1);
-  lcd.print(slopeString);
+  lcd.print(SslopeString);
 
 
   while (0!=1) {
@@ -30,11 +30,11 @@ float selectSlope()
           else {
             ones = 0;
           }
-        float slopeThresh = ones;
+        float slopeSoakThresh = ones;
 
-        String slopeString = String(ones);
+        String SslopeString = String(ones);
         lcd.setCursor(0,1);
-        lcd.print(slopeString);
+        lcd.print(SslopeString);
         delay(400);
         break;
       }
@@ -46,17 +46,17 @@ float selectSlope()
           else {
             ones = 9;
           }
-        float slopeThresh = ones;
-        String slopeString = String(ones);
+        float slopeSoakThresh = ones;
+        String SslopeString = String(ones);
         lcd.setCursor(0,1);
-        lcd.print(slopeString);
+        lcd.print(SslopeString);
         delay(400);
         break;
       }
     case btnSELECT:
       {
-        float slopeThresh =ones;
-        if (slopeThresh>3 || slopeThresh<1) {
+        float slopeSoakThresh =ones;
+        if (slopeSoakThresh>3 || slopeSoakThresh<1) {
           lcd.clear();
           lcd.setCursor(0,0);
           lcd.print("Outside Range");
@@ -64,16 +64,16 @@ float selectSlope()
           lcd.print("Resetting!");
           delay(5000);
           ones = 0;
-          float SlopeThresh =ones;
-          String slopeString =String(ones);
+          float slopeSoakThresh =ones;
+          String SslopeString =String(ones);
           lcd.clear();
           lcd.setCursor(0,0);
           lcd.print("Select A Slope");
           lcd.setCursor(0,1);
-          lcd.print(slopeString);
+          lcd.print(SslopeString);
           delay(400);
         } else{
-          return slopeThresh;
+          return slopeSoakThresh;
         }
         break;
       }
