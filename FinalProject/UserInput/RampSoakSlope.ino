@@ -68,7 +68,7 @@ float selectSoakSlope()
           String SslopeString =String(ones);
           lcd.clear();
           lcd.setCursor(0,0);
-          lcd.print("Select A Slope");
+          lcd.print("Soak Slope");
           lcd.setCursor(0,1);
           lcd.print(SslopeString);
           delay(400);
