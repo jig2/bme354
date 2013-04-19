@@ -68,7 +68,7 @@ float selectPeakSlope()
           String PslopeString =String(ones);
           lcd.clear();
           lcd.setCursor(0,0);
-          lcd.print("Select A Slope");
+          lcd.print("Peak Slope");
           lcd.setCursor(0,1);
           lcd.print(PslopeString);
           delay(400);
