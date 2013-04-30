@@ -181,8 +181,6 @@ void setup(){
     case btnSELECT:
       {
         PreheatThresh = hundreds*100 + tens*10 + ones;
-        Serial.begin(9600);
-        Serial.println(PreheatThresh);
         if (PreheatThresh>170 || PreheatThresh<130) {
           lcd.clear();
           lcd.setCursor(0,0);
@@ -712,7 +710,7 @@ void setup(){
 
   lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print("Preheat Temp");
+  lcd.print("Reflow Time");
   String ReflowTimeString = String(tens) + String(ones);
   lcd.setCursor(0,1);
   lcd.print(ReflowTimeString);
@@ -925,6 +923,10 @@ void setup(){
     }
   }
 
+  Serial.begin(9600);
+  Serial.print(PreheatThresh);
+  Serial.print(slopeSoakTresh);
+
 }
 
 void loop(){
@@ -934,52 +936,60 @@ void loop(){
 }
 
 void Checking(float PreheatThresh, float slopeSoakThresh, float SoakTimeThresh, float PeakThresh, float slopePeakThresh, float ReflowTimeThresh, float ReflowThresh){
+  lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print('Soak Temp');
+  lcd.print("Soak Temp");
   lcd.setCursor(0,1);
   lcd.print(PreheatThresh);
   delay(400);
 
+  lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print('Soak Slope');
+  lcd.print("Soak Slope");
   lcd.setCursor(0,1);
   lcd.print(slopeSoakThresh);
   delay(400);
 
+  lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print('Soak Time');
+  lcd.print("Soak Time");
   lcd.setCursor(0,1);
   lcd.print(SoakTimeThresh);
   delay(400);
 
+  lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print('Reflow Temp');
+  lcd.print("Reflow Temp");
   lcd.setCursor(0,1);
   lcd.print(PeakThresh);
   delay(400);
 
+  lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print('Slope to Reflow');
+  lcd.print("Slope to Reflow");
   lcd.setCursor(0,1);
   lcd.print(slopePeakThresh);
   delay(400);
 
+  lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print('Reflow Time');
+  lcd.print("Reflow Time");
   lcd.setCursor(0,1);
   lcd.print(ReflowTimeThresh);
   delay(400);
 
+  lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print('Reflow Slope');
+  lcd.print("Reflow Slope");
   lcd.setCursor(0,1);
   lcd.print(ReflowThresh);
   delay(400);
 
+  lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print('OK?');
+  lcd.print("OK?");
   lcd.setCursor(0,1);
-  lcd.print('UP=YES DOWN=NO');
+  lcd.print("UP=YES DOWN=NO");
 
   while (0!=1) {
 
@@ -1002,4 +1012,5 @@ void Checking(float PreheatThresh, float slopeSoakThresh, float SoakTimeThresh, 
     }
   }
 }
+
 
