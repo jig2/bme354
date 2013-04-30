@@ -1,26 +1,23 @@
 /*
-
- Control System:
- - controls the heater
- - provides user output
- 
+Initialize Code 
  */
 
+// Define Input/Output Pins
 int inpin = A5;
 int outpin = 2;
 
-// include the library code
+// LCD and PID Libraries
 #include <LiquidCrystal.h>
-
 #include <PID_v1.h>
 
+// initialize LCD
+LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
+
+// Initializie PID
 double readTemp, threshold, turnItOn;
 PID myPID(&readTemp,&turnItOn,&threshold,2,.1,5,DIRECT);
 
-// initialize the library with the numbers of the interface pins
-LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
-
-// define button signifiers
+// Define Button Signifiers
 #define btnNONE 0
 #define btnSELECT 1
 #define btnLEFT 2
@@ -28,32 +25,28 @@ LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 #define btnUP 4
 #define btnRIGHT 5
 
-// define voltage thresholds for each button (obtained from Objective 3)
+// Define Voltage Thresholds for each Button
 #define vSELECT 3.5
 #define vLEFT 2.5
 #define vDOWN 1.5
 #define vUP 0.75
 #define vRIGHT 0.25
 
-// reads what button is being pushed
-int read_button()
+void setup()
 {
-  // obtain ADC reading from analog pin A0
-  double adc_in = analogRead(0);
-  // map ADC reading (range = 0:1023) onto voltage value (range = 0V:5V)
-  double voltage_in = adc_in/1023*5;
+  lcd.begin(16, 2);
 
-  // based on the measured thresholds from Objective 3, determines what button is being pushed
-  if (voltage_in > vSELECT) return btnNONE;
-  if (voltage_in < vRIGHT) return btnRIGHT;
-  if (voltage_in < vUP) return btnUP;
-  if (voltage_in < vDOWN) return btnDOWN;
-  if (voltage_in < vLEFT) return btnLEFT;
-  if (voltage_in < vSELECT) return btnSELECT;
-  return btnNONE;
+  pinMode(inpin,INPUT);
+  pinMode(outpin,OUTPUT);
+
+  myPID.SetMode(AUTOMATIC);
 }
 
-// assign input values
+/*
+Part I. User Input
+ */
+
+// Get Input Values
 
 double region1start = 25;
 double region1end = 150;
@@ -85,218 +78,33 @@ double region6end = region1start;
 double region6slope = -3;
 double region6time = (region6end-region6start)/region6slope;
 
-void setup()
-{
-  lcd.begin(16, 2);
-
-  pinMode(inpin,INPUT);
-  pinMode(outpin,OUTPUT);
-
-  myPID.SetMode(AUTOMATIC);
-}
+/*
+Part II. Control System
+ */
 
 void loop()
 {
   // region 1
-  double region1iterations = 100;
-  double region1delay = round(region1time/region1iterations*1000);
-
-  for (int i = 1; i <= region1iterations; i++) {
-    double readVal = (double) analogRead(inpin);
-
-    Serial.begin(9600);
-    Serial.println(readVal);
-
-    double readVolt = readVal/1023*5;
-    readTemp = readVolt/(4.5-0)*(300-0);
-
-    threshold = region1start + region1slope*region1delay/1000*i; 
-
-    myPID.Compute();
-
-    analogWrite(outpin,turnItOn);
-
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("Desired: ");
-    lcd.setCursor(0,1);
-    lcd.print("Actual: ");
-    lcd.setCursor(9,0);
-    lcd.print(threshold);
-    lcd.setCursor(8,1);
-    lcd.print(readTemp);
-
-    delay(region1delay);
-  }
+  double region1delay = 500;
+  control(1,region1start,region1end,region1slope,region1time,region1delay);
 
   // region 2
-
-  double region2iterations = 100;
-  double region2delay = round(region2time/region2iterations*1000);
-
-  for (int i = 1; i <= region2iterations; i++) {
-    double readVal = (double) analogRead(inpin);
-
-    Serial.begin(9600);
-    Serial.println(readVal);
-
-    double readVolt = readVal/1023*5;
-    readTemp = readVolt/(4.5-0)*(300-0);
-
-    threshold = region2start + region2slope*region2delay/1000*i;
-
-    myPID.Compute();
-
-    analogWrite(outpin,turnItOn);
-
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("Desired: ");
-    lcd.setCursor(0,1);
-    lcd.print("Actual: ");
-    lcd.setCursor(9,0);
-    lcd.print(threshold);
-    lcd.setCursor(8,1);
-    lcd.print(readTemp);
-
-    delay(region2delay);
-  }
-
+  double region2delay = 500;
+  control(2,region2start,region2end,region2slope,region2time,region2delay);
+  
   // region 3
-
-  double region3iterations = 100;
-  double region3delay = round(region3time/region3iterations*1000);
-
-  for (int i = 1; i <= region3iterations; i++) {
-    double readVal = (double) analogRead(inpin);
-
-    Serial.begin(9600);
-    Serial.println(readVal);
-
-    double readVolt = readVal/1023*5;
-    readTemp = readVolt/(4.5-0)*(300-0);
-
-    threshold = region3start + region3slope*region3delay/1000*i;
-
-    myPID.Compute();
-
-    analogWrite(outpin,turnItOn);
-
-
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("Desired: ");
-    lcd.setCursor(0,1);
-    lcd.print("Actual: ");
-    lcd.setCursor(9,0);
-    lcd.print(threshold);
-    lcd.setCursor(8,1);
-    lcd.print(readTemp);
-
-    delay(region3delay);
-  }
-
+  double region3delay = 500;
+  control(3,region3start,region3end,region3slope,region3time,region3delay);
+  
   // region 4
-
-  double region4iterations = 100;
-  double region4delay = round(region4time/region4iterations*1000);
-
-  for (int i = 1; i <= region4iterations; i++) {
-    double readVal = (double) analogRead(inpin);
-
-    Serial.begin(9600);
-    Serial.println(readVal);
-
-    double readVolt = readVal/1023*5;
-    readTemp = readVolt/(4.5-0)*(300-0);
-
-    threshold = region4start + region4slope*region4delay/1000*i;
-
-    myPID.Compute();
-
-    analogWrite(outpin,turnItOn);
-
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("Desired: ");
-    lcd.setCursor(0,1);
-    lcd.print("Actual: ");
-    lcd.setCursor(9,0);
-    lcd.print(threshold);
-    lcd.setCursor(8,1);
-    lcd.print(readTemp);
-
-    delay(region4delay);
-  }
-
+  double region4delay = 500;
+  control(4,region4start,region4end,region4slope,region4time,region4delay);
+  
   // region 5
-
-  double region5iterations = 100;
-  double region5delay = round(region5time/region5iterations*1000);
-
-  for (int i = 1; i <= region5iterations; i++) {
-    double readVal = (double) analogRead(inpin);
-
-    Serial.begin(9600);
-    Serial.println(readVal);
-
-    double readVolt = readVal/1023*5;
-    readTemp = readVolt/(4.5-0)*(300-0);
-
-    threshold = region5start + region5slope*region5delay/1000*i;
-
-    myPID.Compute();
-
-    analogWrite(outpin,turnItOn);
-
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("Desired: ");
-    lcd.setCursor(0,1);
-    lcd.print("Actual: ");
-    lcd.setCursor(9,0);
-    lcd.print(threshold);
-    lcd.setCursor(8,1);
-    lcd.print(readTemp);
-
-    delay(region5delay);
-  }
-
+  double region5delay = 500;
+  control(5,region5start,region5end,region5slope,region5time,region5delay);
+  
   // region 6
-
-  double region6iterations = 100;
-  double region6delay = round(region6time/region6iterations*1000);
-
-  for (int i = 1; i <= region6iterations; i++) {
-    double readVal = (double) analogRead(inpin);
-
-    Serial.begin(9600);
-    Serial.println(readVal);
-
-    double readVolt = readVal/1023*5;
-    readTemp = readVolt/(4.5-0)*(300-0);
-
-    threshold = region6start + region6slope*region6delay/1000*i;
-
-    myPID.Compute();
-
-    analogWrite(outpin,turnItOn);
-
-    lcd.clear();
-    lcd.setCursor(0,0);
-    lcd.print("Desired: ");
-    lcd.setCursor(0,1);
-    lcd.print("Actual: ");
-    lcd.setCursor(9,0);
-    lcd.print(threshold);
-    lcd.setCursor(8,1);
-    lcd.print(readTemp);
-
-    delay(region6delay);
-  }
-
+  double region6delay = 500;
+  control(6,region6start,region6end,region6slope,region6time,region6delay);
 }
-
-
-
-
