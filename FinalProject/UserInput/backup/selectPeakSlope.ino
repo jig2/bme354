@@ -1,6 +1,6 @@
 float selectPeakSlope()
-{
-  float slopePeakThresh;
+
+  {float slopePeakThresh;
 
   int ones = 0;
 
@@ -80,3 +80,4 @@ float selectPeakSlope()
     }
   }
 }
+
