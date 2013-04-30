@@ -1,6 +1,6 @@
-float PreheatTemp()
+float PeakTemp()
 {
-  float PreheatThresh;
+  float PeakThresh;
 
   int hundreds = 0;
   int tens = 0;
@@ -10,10 +10,10 @@ float PreheatTemp()
 
   lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print("Preheat Temp");
-  String PreheattempString = String(hundreds) + String(tens) + String(ones);
+  lcd.print("Peak Temp");
+  String PeaktempString = String(hundreds) + String(tens) + String(ones);
   lcd.setCursor(0,1);
-  lcd.print(PreheattempString);
+  lcd.print(PeaktempString);
 
 
   while (0!=1) {
@@ -52,11 +52,11 @@ float PreheatTemp()
             ones = 0;
           }
         }
-        float PreheatThresh = hundreds*100 + tens*10 + ones;
+        float PeakThresh = hundreds*100 + tens*10 + ones;
 
-        String PreheattempString = String(hundreds) + String(tens) + String(ones);
+        String PeaktempString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
-        lcd.print(PreheattempString);
+        lcd.print(PeaktempString);
         delay(400);
         break;
       }
@@ -86,10 +86,10 @@ float PreheatTemp()
             ones = 9;
           }
         }
-        float PreheatThresh = hundreds*100 + tens*10 + ones;
-        String PreheattempString = String(hundreds) + String(tens) + String(ones);
+        float PeakThresh = hundreds*100 + tens*10 + ones;
+        String PeaktempString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
-        lcd.print(PreheattempString);
+        lcd.print(PeaktempString);
         delay(400);
         break;
       }
@@ -104,10 +104,10 @@ float PreheatTemp()
         else {
           place = 2;
         }
-        float PreheatThresh = hundreds*100 + tens*10 + ones;
-        String PreheattempString = String(hundreds) + String(tens) + String(ones);
+        float PeakThresh = hundreds*100 + tens*10 + ones;
+        String PeaktempString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
-        lcd.print(PreheattempString);
+        lcd.print(PeaktempString);
         delay(400);
         break;
       }
@@ -122,17 +122,17 @@ float PreheatTemp()
         else {
           place = 1;
         }
-        float PreheatThresh = hundreds*100 + tens*10 + ones;
-        String PreheattempString = String(hundreds) + String(tens) + String(ones);
+        float PeakThresh = hundreds*100 + tens*10 + ones;
+        String PeaktempString = String(hundreds) + String(tens) + String(ones);
         lcd.setCursor(0,1);
-        lcd.print(PreheattempString);
+        lcd.print(PeaktempString);
         delay(400);
         break;
       }
     case btnSELECT:
       {
-        float PreheatThresh = hundreds*100 + tens*10 + ones;
-        if (PreheatThresh>170 || PreheatThresh<130) {
+        float PeakThresh = hundreds*100 + tens*10 + ones;
+        if (Peakhresh>237 || PeakThresh<197) {
           lcd.clear();
           lcd.setCursor(0,0);
           lcd.print("Outside of Range");
@@ -142,16 +142,17 @@ float PreheatTemp()
           hundreds = 0;
           tens = 0;
           ones = 0;
-          float PreheatThresh = hundreds*100 + tens*10 + ones;
-          String PreaheattempString = String(hundreds) + String(tens) + String(ones);
+          float PeakThresh = hundreds*100 + tens*10 + ones;
+          String PeaktempString = String(hundreds) + String(tens) + String(ones);
           lcd.clear();
           lcd.setCursor(0,0);
-          lcd.print("Preheat Temp");
+          lcd.print("Peak Temp");
           lcd.setCursor(0,1);
-          lcd.print(PreheattempString);
+          lcd.print(PeaktempString);
           delay(400);
-        } else{
-          return PreheatThresh;
+        } 
+        else{
+          return PeakThresh;
         }
         break;
       }
