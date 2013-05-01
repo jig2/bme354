@@ -138,6 +138,9 @@ void loop()
     ready6 = review(6,region6start,region6end,region6slope,region6time);
   }
 
+  // Ready To Start
+  readyToStart();
+
   // Control System: Region 1
   control(1,region1start,region1end,region1slope,region1time,500);
 

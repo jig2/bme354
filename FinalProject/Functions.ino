@@ -39,6 +39,10 @@ void control(int region,double startT, double endT, double slope, double time, d
     int secondsLeft = timeLeft % 60;
 
     LCD_ControlSystem(region,readTemp,threshold,minutesLeft,secondsLeft);
+    
+    Serial.begin(9600);
+    Serial.println(readTemp);
+    
     delay(delayTime);
   }
 }
@@ -63,8 +67,8 @@ double getTemp(){
 void LCD_ControlSystem(int region,double readTemp,double threshold,int minutesLeft,int secondsLeft){
   lcd.clear();
   lcd.setCursor(0,0);
-  lcd.print("Stage   D      C");
-  lcd.setCursor(5,0);
+  lcd.print("Region  D      C");
+  lcd.setCursor(6,0);
   lcd.print(region);
   lcd.setCursor(9,0);
   if (threshold<100) {
@@ -131,6 +135,26 @@ int read_button()
 
 /********************
  * 
+ * readyToStart()
+ * 
+ ********************/
+void readyToStart()
+{
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Ready to Start!");
+  int button_in = read_button();
+  while (0!=1){
+    if (button_in == btnSELECT){
+      break;
+    }
+    delay(100);
+    button_in = read_button();
+  }
+}
+
+/********************
+ * 
  * review()
  * 
  ********************/
@@ -142,11 +166,13 @@ int review(int region, double tempStart, double tempEnd, double slope, double ti
   lcd.setCursor(8,0);
   lcd.print(region);
   lcd.setCursor(0,1);
-  lcd.print("StartTemp      C");
-  lcd.setCursor(9,1);
+  lcd.print("StrtTemp       C");
+  lcd.setCursor(14,1);
+  lcd.print((char)223);
+  lcd.setCursor(8,1);
   lcd.print(tempStart);
   delay(2000);
-  
+
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Region");
@@ -154,10 +180,12 @@ int review(int region, double tempStart, double tempEnd, double slope, double ti
   lcd.print(region);
   lcd.setCursor(0,1);
   lcd.print("EndTemp        C");
-  lcd.setCursor(9,1);
+  lcd.setCursor(14,1);
+  lcd.print((char)223);
+  lcd.setCursor(8,1);
   lcd.print(tempEnd);
   delay(2000);
-  
+
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Region");
@@ -165,10 +193,12 @@ int review(int region, double tempStart, double tempEnd, double slope, double ti
   lcd.print(region);
   lcd.setCursor(0,1);
   lcd.print("Slope        C/s");
-  lcd.setCursor(8,1);
+  lcd.setCursor(12,1);
+  lcd.print((char)223);
+  lcd.setCursor(7,1);
   lcd.print(slope);
   delay(2000);
-  
+
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Region");
@@ -176,10 +206,10 @@ int review(int region, double tempStart, double tempEnd, double slope, double ti
   lcd.print(region);
   lcd.setCursor(0,1);
   lcd.print("Time         sec");
-  lcd.setCursor(7,1);
+  lcd.setCursor(6,1);
   lcd.print(time);
   delay(2000);
-  
+
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Region");
@@ -187,8 +217,8 @@ int review(int region, double tempStart, double tempEnd, double slope, double ti
   lcd.print(region);
   lcd.setCursor(0,1);
   lcd.print("Is this okay?");
-  delay(2000);
-  
+  delay(1000);
+
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Region");
@@ -274,6 +304,7 @@ void Statistics(double* DesiredPeakTemp, double* ActualPeakTemp, double* Percent
   lcd.setCursor(0,0);
   lcd.print("Reg1PercentError");
   lcd.setCursor(0,1);
+  lcd.print("      %");
   lcd.print(PercentError[0]);
   delay(2000);
 
@@ -281,6 +312,7 @@ void Statistics(double* DesiredPeakTemp, double* ActualPeakTemp, double* Percent
   lcd.setCursor(0,0);
   lcd.print("Reg2PercentError");
   lcd.setCursor(0,1);
+  lcd.print("      %");
   lcd.print(PercentError[1]);
   delay(2000);
 
@@ -288,6 +320,7 @@ void Statistics(double* DesiredPeakTemp, double* ActualPeakTemp, double* Percent
   lcd.setCursor(0,0);
   lcd.print("Reg3PercentError");
   lcd.setCursor(0,1);
+  lcd.print("      %");
   lcd.print(PercentError[2]);
   delay(2000);
 
@@ -295,6 +328,7 @@ void Statistics(double* DesiredPeakTemp, double* ActualPeakTemp, double* Percent
   lcd.setCursor(0,0);
   lcd.print("Reg4PercentError");
   lcd.setCursor(0,1);
+  lcd.print("      %");
   lcd.print(PercentError[3]);
   delay(2000);
 
@@ -302,6 +336,7 @@ void Statistics(double* DesiredPeakTemp, double* ActualPeakTemp, double* Percent
   lcd.setCursor(0,0);
   lcd.print("Reg5PercentError");
   lcd.setCursor(0,1);
+  lcd.print("      %");
   lcd.print(PercentError[4]);
   delay(2000);
 
@@ -309,6 +344,7 @@ void Statistics(double* DesiredPeakTemp, double* ActualPeakTemp, double* Percent
   lcd.setCursor(0,0);
   lcd.print("Reg6PercentError");
   lcd.setCursor(0,1);
+  lcd.print("      %");
   lcd.print(PercentError[5]);
   delay(2000);
 }
@@ -327,7 +363,7 @@ double UserInput(int numbers, double lowval, double highval, int name)
   lcd.setCursor(0,0);
   switch (name) {
   case 1:
-    lcd.print("Region1TempFinal");
+    lcd.print("Region1FinalTemp");
     break;
   case 2:
     lcd.print("Region1Slope");
@@ -339,13 +375,13 @@ double UserInput(int numbers, double lowval, double highval, int name)
     lcd.print("Region3Slope");
     break;
   case 5:
-    lcd.print("Region3TempFinal");
+    lcd.print("Region3FinalTemp");
     break;
   case 6:
-    lcd.print("Region56Time");
+    lcd.print("Region45Time");
     break;
   case 7:
-    lcd.print("Region7Slope");
+    lcd.print("Region6Slope");
     break;
   }
 
@@ -358,6 +394,40 @@ double UserInput(int numbers, double lowval, double highval, int name)
 
     value = hundreds*100 + tens*10 + ones;
     String valueString= String(hundreds)+String(tens)+String(ones);
+    lcd.setCursor(0,1);
+    switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
     lcd.setCursor(0,1);
     lcd.print(valueString);
 
@@ -399,6 +469,40 @@ double UserInput(int numbers, double lowval, double highval, int name)
           value = hundreds*100 + tens*10 + ones;
           String valueString = String(hundreds)+String(tens)+String(ones);
           lcd.setCursor(0,1);
+          switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
+          lcd.setCursor(0,1);
           lcd.print(valueString);
           delay(400);
           break;
@@ -432,6 +536,40 @@ double UserInput(int numbers, double lowval, double highval, int name)
           value = hundreds*100 + tens*10 + ones;
           String valueString = String(hundreds)+String(tens)+String(ones);
           lcd.setCursor(0,1);
+          switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
+          lcd.setCursor(0,1);
           lcd.print(valueString);
           delay(400);
           break;
@@ -450,6 +588,40 @@ double UserInput(int numbers, double lowval, double highval, int name)
           value = hundreds*100 + tens*10 + ones;
           String valueString = String(hundreds)+String(tens)+String(ones);
           lcd.setCursor(0,1);
+          switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
+          lcd.setCursor(0,1);
           lcd.print(valueString);
           delay(400);
           break;
@@ -467,6 +639,40 @@ double UserInput(int numbers, double lowval, double highval, int name)
           }
           value = hundreds*100 + tens*10 + ones;
           String valueString = String(hundreds)+String(tens)+String(ones);
+          lcd.setCursor(0,1);
+          switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
           lcd.setCursor(0,1);
           lcd.print(valueString);
           delay(400);
@@ -496,7 +702,7 @@ double UserInput(int numbers, double lowval, double highval, int name)
             lcd.setCursor(0,0);
             switch (name) {
             case 1:
-              lcd.print("Region1TempFinal");
+              lcd.print("Region1FinalTemp");
               break;
             case 2:
               lcd.print("Region1Slope");
@@ -508,15 +714,49 @@ double UserInput(int numbers, double lowval, double highval, int name)
               lcd.print("Region3Slope");
               break;
             case 5:
-              lcd.print("Region3TempFinal");
+              lcd.print("Region3FinalTemp");
               break;
             case 6:
-              lcd.print("Region56Time");
+              lcd.print("Region45Time");
               break;
             case 7:
-              lcd.print("Region7Slope");
+              lcd.print("Region6Slope");
               break;
             }
+            lcd.setCursor(0,1);
+            switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
             lcd.setCursor(0,1);
             lcd.print(valueString);
             delay(400);
@@ -537,6 +777,40 @@ double UserInput(int numbers, double lowval, double highval, int name)
     place = 1;
     value=tens*10 + ones;
     String valueString = String(tens)+String(ones);
+    lcd.setCursor(0,1);
+    switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
     lcd.setCursor(0,1);
     lcd.print(valueString);
 
@@ -573,6 +847,40 @@ double UserInput(int numbers, double lowval, double highval, int name)
 
           String valueString  = String(tens)+String(ones);
           lcd.setCursor(0,1);
+          switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
+          lcd.setCursor(0,1);
           lcd.print(valueString);
           delay(400);
           break;
@@ -598,6 +906,40 @@ double UserInput(int numbers, double lowval, double highval, int name)
           value = tens*10 + ones;
           String valueString  = String(tens)+String(ones);
           lcd.setCursor(0,1);
+          switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
+          lcd.setCursor(0,1);
           lcd.print(valueString);
           delay(400);
           break;
@@ -613,6 +955,40 @@ double UserInput(int numbers, double lowval, double highval, int name)
           value = tens*10 + ones;
           String valueString = String(tens)+String(ones);
           lcd.setCursor(0,1);
+          switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
+          lcd.setCursor(0,1);
           lcd.print(valueString);
           delay(400);
           break;
@@ -627,6 +1003,40 @@ double UserInput(int numbers, double lowval, double highval, int name)
           } 
           value = tens*10 + ones;
           String valueString  = String(tens)+String(ones);
+          lcd.setCursor(0,1);
+          switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
           lcd.setCursor(0,1);
           lcd.print(valueString);
           delay(400);
@@ -654,7 +1064,7 @@ double UserInput(int numbers, double lowval, double highval, int name)
             lcd.setCursor(0,0);
             switch (name) {
             case 1:
-              lcd.print("Region1TempFinal");
+              lcd.print("Region1FinalTemp");
               break;
             case 2:
               lcd.print("Region1Slope");
@@ -666,19 +1076,50 @@ double UserInput(int numbers, double lowval, double highval, int name)
               lcd.print("Region3Slope");
               break;
             case 5:
-              lcd.print("Region3TempFinal");
+              lcd.print("Region3FinalTemp");
               break;
             case 6:
-              lcd.print("Region56Time");
+              lcd.print("Region45Time");
               break;
             case 7:
-              lcd.print("Region7Slope");
+              lcd.print("Region6Slope");
               break;
             }
             lcd.setCursor(0,1);
-            lcd.print(valueString);
-            delay(400);
-          } 
+            switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
+          }
           else{
             delay(400);
             return value;
@@ -693,6 +1134,40 @@ double UserInput(int numbers, double lowval, double highval, int name)
 
     value=ones;
     String valueString = String(ones);
+    lcd.setCursor(0,1);
+    switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
     lcd.setCursor(0,1);
     lcd.print(valueString);
 
@@ -719,6 +1194,40 @@ double UserInput(int numbers, double lowval, double highval, int name)
 
           String valueString = String(ones);
           lcd.setCursor(0,1);
+          switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
+          lcd.setCursor(0,1);
           lcd.print(valueString);
           delay(400);
           break;
@@ -733,6 +1242,40 @@ double UserInput(int numbers, double lowval, double highval, int name)
           }
           value = ones;
           String valueString = String(ones);
+          lcd.setCursor(0,1);
+          switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
           lcd.setCursor(0,1);
           lcd.print(valueString);
           delay(400);
@@ -759,7 +1302,7 @@ double UserInput(int numbers, double lowval, double highval, int name)
             lcd.setCursor(0,0);
             switch (name) {
             case 1:
-              lcd.print("Region1TempFinal");
+              lcd.print("Region1FinalTemp");
               break;
             case 2:
               lcd.print("Region1Slope");
@@ -771,15 +1314,49 @@ double UserInput(int numbers, double lowval, double highval, int name)
               lcd.print("Region3Slope");
               break;
             case 5:
-              lcd.print("Region3TempFinal");
+              lcd.print("Region3FinalTemp");
               break;
             case 6:
-              lcd.print("Region56Time");
+              lcd.print("Region45Time");
               break;
             case 7:
-              lcd.print("Region7Slope");
+              lcd.print("Region6Slope");
               break;
             }
+            lcd.setCursor(0,1);
+            switch (name) {
+    case 1:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 2:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 3:
+      lcd.print("    sec");
+      break;
+    case 4:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    case 5:
+      lcd.print("    C");
+      lcd.setCursor(3,1);
+      lcd.print((char)223);
+      break;
+    case 6:
+      lcd.print("   sec");
+      break;
+    case 7:
+      lcd.print("  C/s");
+      lcd.setCursor(1,1);
+      lcd.print((char)223);
+      break;
+    }
             lcd.setCursor(0,1);
             lcd.print(valueString);
             delay(400);
@@ -801,4 +1378,5 @@ double UserInput(int numbers, double lowval, double highval, int name)
     lcd.print("Fix Code");
   }
 }
+
 
