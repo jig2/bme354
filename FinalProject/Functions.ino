@@ -135,7 +135,7 @@ int read_button()
  * 
  ********************/
 
-void review(int region, double tempStart, double tempEnd, double slope, double time){
+int review(int region, double tempStart, double tempEnd, double slope, double time){
   lcd.clear();
   lcd.setCursor(0,0);
   lcd.print("Region");
@@ -145,7 +145,7 @@ void review(int region, double tempStart, double tempEnd, double slope, double t
   lcd.print("StartTemp      C");
   lcd.setCursor(9,1);
   lcd.print(tempStart);
-  delay(3000);
+  delay(2000);
   
   lcd.clear();
   lcd.setCursor(0,0);
@@ -156,7 +156,7 @@ void review(int region, double tempStart, double tempEnd, double slope, double t
   lcd.print("EndTemp        C");
   lcd.setCursor(9,1);
   lcd.print(tempEnd);
-  delay(3000);
+  delay(2000);
   
   lcd.clear();
   lcd.setCursor(0,0);
@@ -167,7 +167,7 @@ void review(int region, double tempStart, double tempEnd, double slope, double t
   lcd.print("Slope        C/s");
   lcd.setCursor(8,1);
   lcd.print(slope);
-  delay(3000);
+  delay(2000);
   
   lcd.clear();
   lcd.setCursor(0,0);
@@ -178,7 +178,44 @@ void review(int region, double tempStart, double tempEnd, double slope, double t
   lcd.print("Time         sec");
   lcd.setCursor(7,1);
   lcd.print(time);
-  delay(3000);
+  delay(2000);
+  
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Region");
+  lcd.setCursor(8,0);
+  lcd.print(region);
+  lcd.setCursor(0,1);
+  lcd.print("Is this okay?");
+  delay(2000);
+  
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Region");
+  lcd.setCursor(8,0);
+  lcd.print(region);
+  lcd.setCursor(0,1);
+  lcd.print("UP=YES DOWN=NO");
+  while (0!=1) {
+    int button_in = read_button();
+    switch(button_in)
+    {
+    case btnNONE:
+      {
+        break;
+      }
+    case btnUP:
+      {
+        delay(400);
+        return 1;
+      }
+    case btnDOWN:
+      {
+        delay(400);
+        return 0;
+      }
+    }
+  }
 }
 
 /********************
@@ -188,10 +225,11 @@ void review(int region, double tempStart, double tempEnd, double slope, double t
  ********************/
 void shutDown()
 {
+  digitalWrite(outpin,LOW);
   while (0!=1){
     lcd.clear();
     lcd.setCursor(0,0);
-    lcd.print("Exceeded 300F!!!");
+    lcd.print("Exceeded 300C!!!");
     lcd.setCursor(0,1);
     lcd.print("ShutDown & Reset");
     delay(1000);

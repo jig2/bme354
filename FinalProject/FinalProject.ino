@@ -16,7 +16,7 @@ LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
 // Initializie PID
 double readTemp, threshold, turnItOn;
-PID myPID(&readTemp,&turnItOn,&threshold,2,.1,5,DIRECT);
+PID myPID(&readTemp,&turnItOn,&threshold,5,0,1,DIRECT);
 
 // Define Button Signifiers
 #define btnNONE 0
@@ -89,13 +89,55 @@ void loop()
   double region6time = (region6end-region6start)/region6slope;
 
   // Review User Input Values
-  review(1,region1start,region1end,region1slope,region1time);
-  review(2,region2start,region2end,region2slope,region2time);
-  review(3,region3start,region3end,region3slope,region3time);
-  review(4,region4start,region4end,region4slope,region4time);
-  review(5,region5start,region5end,region5slope,region5time);
-  review(6,region6start,region6end,region6slope,region6time);
-  
+  int ready1 = review(1,region1start,region1end,region1slope,region1time);
+  while (ready1==0){
+    region1start = getTemp();
+    region1end = UserInput(3,130,170,1);
+    region1slope = UserInput(1,1,4,2);
+    region1time = (region1end-region1start)/region1slope;
+    ready1 = review(1,region1start,region1end,region1slope,region1time);
+  }
+  int ready2 = review(2,region2start,region2end,region2slope,region2time);
+  while (ready2==0){
+    region2start = region1end;
+    region2end = region2start;
+    region2slope = 0;
+    region2time = UserInput(3,60,120,3);
+    ready2 = review(2,region2start,region2end,region2slope,region2time);
+  }
+  int ready3 = review(3,region3start,region3end,region3slope,region3time);
+  while (ready3==0){
+    region3start = region2end;
+    region3end = UserInput(3,197,237,5);
+    region3slope = UserInput(1,1,4,4);
+    region3time = (region3end-region3start)/region3slope;
+    ready3 = review(3,region3start,region3end,region3slope,region3time);
+  }
+  int ready4 = review(4,region4start,region4end,region4slope,region4time);
+  while (ready4==0){
+    region4start = region3end;
+    region4slope = region3slope;
+    region4time = UserInput(2,45,75,6)/2;
+    region4end = region4slope*region4time + region4start;
+    ready4 = review(4,region4start,region4end,region4slope,region4time);
+  }
+  int ready5 = review(5,region5start,region5end,region5slope,region5time);
+  while (ready5==0){
+    region5start = region4end;
+    region5end = region3end;
+    region5time = region4time;
+    region5slope = (region5end-region5start)/region5time;
+    ready5 = review(5,region5start,region5end,region5slope,region5time);
+  }
+  int ready6 = review(6,region6start,region6end,region6slope,region6time);
+  while (ready6==0){
+    region6start = region5end;
+    region6end = region1start;
+    region6slope = -UserInput(1,1,4,7);
+    region6time = (region6end-region6start)/region6slope;
+    ready6 = review(6,region6start,region6end,region6slope,region6time);
+  }
+
   // Control System: Region 1
   control(1,region1start,region1end,region1slope,region1time,500);
 
@@ -123,4 +165,5 @@ void loop()
   // Compute Statistics
   Statistics(DesiredPeakTemp,ActualPeakTemp,PercentError);
 }
+
 
