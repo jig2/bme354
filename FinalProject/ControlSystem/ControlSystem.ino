@@ -1,7 +1,3 @@
-/*
-Initialize Code 
- */
-
 // Define Input/Output Pins
 int inpin = A5;
 int outpin = 2;
@@ -78,6 +74,10 @@ double region6end = region1start;
 double region6slope = -3;
 double region6time = (region6end-region6start)/region6slope;
 
+double DesiredPeakTemp[] = {0,0,0,0,0,0};
+double ActualPeakTemp[] = {0,0,0,0,0,0};
+double PercentError[] = {0,0,0,0,0,0};
+
 /*
 Part II. Control System
  */
@@ -85,26 +85,29 @@ Part II. Control System
 void loop()
 {
   // region 1
-  double region1delay = 500;
-  control(1,region1start,region1end,region1slope,region1time,region1delay);
+  control(1,region1start,region1end,region1slope,region1time,500);
 
   // region 2
-  double region2delay = 500;
-  control(2,region2start,region2end,region2slope,region2time,region2delay);
+  control(2,region2start,region2end,region2slope,region2time,500);
   
   // region 3
-  double region3delay = 500;
-  control(3,region3start,region3end,region3slope,region3time,region3delay);
+  control(3,region3start,region3end,region3slope,region3time,500);
   
   // region 4
-  double region4delay = 500;
-  control(4,region4start,region4end,region4slope,region4time,region4delay);
+  control(4,region4start,region4end,region4slope,region4time,500);
   
   // region 5
-  double region5delay = 500;
-  control(5,region5start,region5end,region5slope,region5time,region5delay);
+  control(5,region5start,region5end,region5slope,region5time,500);
   
   // region 6
-  double region6delay = 500;
-  control(6,region6start,region6end,region6slope,region6time,region6delay);
+  control(6,region6start,region6end,region6slope,region6time,500);
+
+  // finished
+  lcd.clear();
+  lcd.setCursor(0,0);
+  lcd.print("Finished!");
+  delay(3000);
+  
+  // statistics
+  Statistics(DesiredPeakTemp,ActualPeakTemp,PercentError);
 }
