@@ -1,101 +1,105 @@
-%% BME 354 Arduino Project
-
 function Arduino(Samples)
 
-delete(instrfind({'Port'},{'COM3'}));
-S=serial('COM3','BaudRate',9600);
+% Setup COM3 Port
+delete(instrfind({'Port'},{'COM4'}));
+S = serial('COM4','BaudRate',9600);
 fopen(S);
 
-region1end = input('Region1FinalTemp: ');
-region1slope = input('Region1Slope: ');
-region2time = input('Region2Time: ');
-region3end = input('Region3FinalTemp: ');
-region3slope = input('Region3Slope: ');
-region45time = input('Region45Time: ');
-region6slope = input('Region6Slope: ');
+% Enter same input values as those from Arduino
+r1.end = input('Enter Region 1 Final Temperature [°C]: ');
+r1.slope = input('Enter Region 1 Slope [°C/s]: ');
+r2.time = input('Enter Region 2 Time [sec]: ');
+r3.end = input('Enter Region 3 Final Temperature [°C]: ');
+r3.slope = input('Enter Region 3 Slope [°C/s]: ');
+r45time = input('Enter Region 4&5 Time [sec]: ');
+r6.slope = input('Enter Region 6 Slope [°C/s]: ');
 input('Press ENTER when ready!');
 
-t=0:.5:749.5;
-y=zeros(1,1500);
-counter=1;
+% Initializes Actual values
+tActual = 0 : 0.5 : 749.5;
+Actual = zeros(1,1500);
+counter = 1;
 
-figure(1), clf, grid
+% Starts figure
+figure, clf, grid
 xlabel('Time [sec]')
 ylabel('Temperature [°C]')
-axis([0 750 0 1000])
-
+axis([0 750 0 350])
 hold on
 
-holder=fscanf(S,'%d');
-y(counter)=holder(1);
-plot(t(counter),y(counter),'r')
+% Obtains first Actual data point
+holder = fscanf(S,'%d');
+Actual(counter) = holder(1);
+plot(tActual(counter),Actual(counter),'r')
 drawnow
-counter=counter+1;
+counter = counter + 1;
 
-region1start = y(1);
-region1time = (region1end-region1start)/region1slope;
+% Calculates necessary values to draw Desired graph
+r1.start = Actual(1);
+r1.time = (r1.end-r1.start)/r1.slope;
 
-region2start = region1end;
-region2end = region2start;
-region2slope = 0;
+r2.start = r1.end;
+r2.end = r2.start;
+r2.slope = 0;
 
-region3start = region2end;
-region3time = (region3end-region3start)/region3slope;
+r3.start = r2.end;
+r3.time = (r3.end-r3.start)/r3.slope;
 
-region4start = region3end;
-region4slope = region3slope;
-region4time = region45time/2;
-region4end = region4slope*region4time + region4start;
+r4.start = r3.end;
+r4.slope = r3.slope;
+r4.time = r45time/2;
+r4.end = r4.slope*r4.time + r4.start;
 
-region5start = region4end;
-region5end = region3end;
-region5time = region4time;
-region5slope = (region5end-region5start)/region5time;
+r5.start = r4.end;
+r5.end = r3.end;
+r5.time = r4.time;
+r5.slope = (r5.end-r5.start)/r5.time;
 
-region6start = region5end;
-region6end = region1start;
-region6slope = -region6slope;
-region6time = (region6end-region6start)/region6slope;
+r6.start = r5.end;
+r6.end = r1.start;
+r6.slope = -r6.slope;
+r6.time = (r6.end-r6.start)/r6.slope;
 
-region1iter = round(region1time)/0.5;
-region2iter = round(region2time)/0.5;
-region3iter = round(region3time)/0.5;
-region4iter = round(region4time)/0.5;
-region5iter = round(region5time)/0.5;
-region6iter = round(region6time)/0.5;
+r1.iter = round(r1.time)/0.5;
+r2.iter = round(r2.time)/0.5;
+r3.iter = round(r3.time)/0.5;
+r4.iter = round(r4.time)/0.5;
+r5.iter = round(r5.time)/0.5;
+r6.iter = round(r6.time)/0.5;
 
-for i = 1:region1iter
-    z(i) = region1start + region1slope*0.5*i;
+for i = 1:r1.iter
+    Desired(i) = r1.start + r1.slope*0.5*i;
 end
-for i = 1:region2iter
-    z(region1iter+i) = region2start + region2slope*0.5*i;
+for i = 1:r2.iter
+    Desired(r1.iter+i) = r2.start + r2.slope*0.5*i;
 end
-for i = 1:region3iter
-    z(region1iter+region2iter+i) = region3start + region3slope*0.5*i;
+for i = 1:r3.iter
+    Desired(r1.iter+r2.iter+i) = r3.start + r3.slope*0.5*i;
 end
-for i = 1:region4iter
-    z(region1iter+region2iter+region3iter+i) = region4start + region4slope*0.5*i;
+for i = 1:r4.iter
+    Desired(r1.iter+r2.iter+r3.iter+i) = r4.start + r4.slope*0.5*i;
 end
-for i = 1:region5iter
-    z(region1iter+region2iter+region3iter+region4iter+i) = region5start + region5slope*0.5*i;
+for i = 1:r5.iter
+    Desired(r1.iter+r2.iter+r3.iter+r4.iter+i) = r5.start + r5.slope*0.5*i;
 end
-for i = 1:region6iter
-    z(region1iter+region2iter+region3iter+region4iter+region5iter+i) = region6start + region6slope*0.5*i;
+for i = 1:r6.iter
+    Desired(r1.iter+r2.iter+r3.iter+r4.iter+r5.iter+i) = r6.start + r6.slope*0.5*i;
 end
 
-tplot = t(1:length(z));
-plot(tplot,z,'k-')
+% Plots Desired graph
+tDesired = tActual(1:length(Desired));
+plot(tDesired,Desired,'k-')
 
-while counter<=Samples
-    holder=fscanf(S,'%d');
-    y(counter)=holder(1);
-    plot(t(counter),y(counter),'r')
+% Obtains and plots remaining Actual Points
+while counter <= Samples
+    holder = fscanf(S,'%d');
+    Actual(counter) = holder(1);
+    plot(tActual(counter),Actual(counter),'r')
     drawnow
-    counter=counter+1;
+    counter = counter + 1;
+    save('data.mat','tActual','Actual','tDesired','Desired')
 end
 fclose(S);
 delete(S);
-
-Region
 
 end
