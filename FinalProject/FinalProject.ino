@@ -16,7 +16,7 @@ LiquidCrystal lcd(8, 9, 4, 5, 6, 7);
 
 // Initializie PID
 double readTemp, threshold, turnItOn;
-PID myPID(&readTemp,&turnItOn,&threshold,5,0,3,DIRECT);
+PID myPID(&readTemp,&turnItOn,&threshold,2,0,2,DIRECT);
 
 // Define Button Signifiers
 #define btnNONE 0
