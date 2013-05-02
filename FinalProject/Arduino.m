@@ -142,12 +142,14 @@ xlabel('Time [sec]')
 ylabel('Temperature [°C]')
 title('Shifted')
 
+% Aligns data points
 cutoff = find(min(abs(tActual-tDesired(1)))==abs(tActual-tDesired(1)));
 tActual = tActual(cutoff:end);
 Actual = Actual(cutoff:end);
 tDesired = tDesired(1:length(Actual));
 Desired = Desired(1:length(Actual));
 
+% Determines regions
 region2 = find(Desired==150);
 region2 = region2(1:end-1);
 region1 = 1:region2(1)-1;
@@ -157,6 +159,7 @@ region4 = region3(end)+1:find(Desired==max(Desired));
 region5 = region4(end)+1:hit200(2);
 region6 = region5(end)+1:length(Desired);
 
+% Calculates new percent errors
 PE1 = sum(abs(Actual(region1)-Desired(region1))./Desired(region1))/length(region1)*100
 PE2 = sum(abs(Actual(region2)-Desired(region2))./Desired(region2))/length(region2)*100
 PE3 = sum(abs(Actual(region3)-Desired(region3))./Desired(region3))/length(region3)*100
