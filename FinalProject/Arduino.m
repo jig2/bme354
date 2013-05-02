@@ -102,4 +102,66 @@ end
 fclose(S);
 delete(S);
 
+% Removes extra data points in Actual
+tActual = tActual(Actual~=0);
+Actual = Actual(Actual~=0);
+
+% Plots Desired and Actual
+figure
+plot(tDesired,Desired,'k-',...
+     tActual,Actual,'r.','MarkerSize',1)
+grid
+axis([0 550 0 250])
+xlabel('Time [sec]')
+ylabel('Temperature [°C]')
+
+% Calculates cross correlation of Desired and Actual
+tCorr = linspace(-length(Desired)/2,length(Desired)/2,2*length(Desired)-1);
+correlation = xcorr(Actual,Desired);
+
+% Plots cross correlation
+figure
+plot(tCorr,correlation,'k-')
+grid
+xlabel('Time Shift [sec]')
+ylabel('Magnitude')
+title('Cross Correlation')
+
+% Determines and performs requried time shift
+[~,shift] = max(correlation);
+shift = tCorr(shift);
+tDesired = tDesired + shift;
+
+% Plots shifted Desired and Actual
+figure
+plot(tDesired,Desired,'k-',...
+     tActual,Actual,'r.','MarkerSize',1)
+grid
+axis([0 550 0 250])
+xlabel('Time [sec]')
+ylabel('Temperature [°C]')
+title('Shifted')
+
+cutoff = find(min(abs(tActual-tDesired(1)))==abs(tActual-tDesired(1)));
+tActual = tActual(cutoff:end);
+Actual = Actual(cutoff:end);
+tDesired = tDesired(1:length(Actual));
+Desired = Desired(1:length(Actual));
+
+region2 = find(Desired==150);
+region2 = region2(1:end-1);
+region1 = 1:region2(1)-1;
+hit200 = find(Desired==200);
+region3 = region2(end)+1:hit200(1);
+region4 = region3(end)+1:find(Desired==max(Desired));
+region5 = region4(end)+1:hit200(2);
+region6 = region5(end)+1:length(Desired);
+
+PE1 = sum(abs(Actual(region1)-Desired(region1))./Desired(region1))/length(region1)*100
+PE2 = sum(abs(Actual(region2)-Desired(region2))./Desired(region2))/length(region2)*100
+PE3 = sum(abs(Actual(region3)-Desired(region3))./Desired(region3))/length(region3)*100
+PE4 = sum(abs(Actual(region4)-Desired(region4))./Desired(region4))/length(region4)*100
+PE5 = sum(abs(Actual(region5)-Desired(region5))./Desired(region5))/length(region5)*100
+PE6 = sum(abs(Actual(region6)-Desired(region6))./Desired(region6))/length(region6)*100
+
 end
